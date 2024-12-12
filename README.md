@@ -1,0 +1,2 @@
+# Construirea-unui-AFN-echivalent-cu-o-expresie-regulat-
+Urmarind structura sintatica a EXPRESIEI REGULATE de la care se porneste, metoda prezentata e un algoritm dirijat de sintaxa. AUTOMATUL FINIT NEDETERMINIST obtinut pe aceasta cale are relativ multe stari in comparatie cu cele obtinute prin alte metode. Acest dezavantaj este insa compensat de simplitatea si naturaletea mcanismului de constructie.
