@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFN Vizualizare</title>
+    <style>
+        /* Stiluri generale pentru corpul paginii */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        /* Stiluri pentru containerul de butoane */
+        div {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        /* Stiluri pentru butoane */
+        button {
+            padding: 15px 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            background: linear-gradient(45deg, #007BFF, #0056b3);
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Stiluri pentru imagine */
+        #image-container {
+            margin-top: 30px;    
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        img.show {
+            opacity: 1;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: #f4f4f9;
+        }
+
+        .dark-mode-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #444;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Construire AFN</h1>
+    <p>Construirea unui AFN echivalent cu o expresie regulată</p>
+    <p>Selectează o expresie regulată pentru a vedea graficul corespunzător:</p>
+    <div>
+         <!-- Buton pentru activare Mod Întunecat -->
+        <button class="dark-mode-button" onclick="toggleDarkMode()">Dark/White</button>
+        <button onclick="showImage('regex_abb.png')">abb</button>
+        <button onclick="showImage('regex_aStarbPlus.png')">a*b+</button>
+        <button onclick="showImage('regex_abcstarabbc.png')">(a|b|c)*abbc</button>
+        <button onclick="showImage('regex_abcd.png')">a(b|c)*d</button>
+        <button onclick="showImage('regex_aOrBStarABB.png')">(a|b)*abb</button>
+        <button onclick="showImage('regex_aQuestionBorCStarDPlus.png')">a?(b|c)*d+</button>
+    </div>
+    <div id="image-container">
+        <img id="graph-image" src="" alt="Grafic AFN">
+    </div>
+
+    <script>
+        // Funcție pentru a afișa imaginea corespunzătoare
+        function showImage(imageName) {
+            const img = document.getElementById('graph-image');
+            img.src = imageName;
+            img.onload = () => {
+            img.classList.add('show');
+            };
+            img.style.display = 'block';
+            }
+        
+         // Comutare Mod Întunecat
+         function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+    </script> 
+</body>
+</html>

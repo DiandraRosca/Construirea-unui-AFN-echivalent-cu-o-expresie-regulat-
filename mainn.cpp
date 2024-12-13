@@ -73,8 +73,8 @@ NFA createAFNForAStarBPlus() {
     nfa.transitions.push_back({loopA, "a", loopA});
     nfa.transitions.push_back({loopA, "b", stateB});
     nfa.transitions.push_back({stateB, "b", loopB});
-    nfa.transitions.push_back({loopB, "b", loopB});
-    nfa.transitions.push_back({loopB, "ε", nfa.finalState});
+    nfa.transitions.push_back({loopB, "b", nfa.finalState});
+   
 
     return nfa;
 }
@@ -166,6 +166,41 @@ NFA createAFNForABCStarABBC(){
 
 }
 
+//Functie pentru expresia a?(b|c)*d+
+NFA createAFNForAQuestionBorCStarDPlus(){
+    NFA nfa;
+    int state = 0;
+
+     // Definirea stărilor
+    nfa.startState = state++;
+    int stateA = state++;
+    int stateB = state++;
+    int stateC = state++;
+    int stateD = state++;
+    int stateLoop = state++;
+    int stateFinal = state++;
+
+    nfa.finalState = stateFinal;
+
+    // Tranzițiile pentru `a?`
+    nfa.transitions.push_back({nfa.startState, "ε", stateA});  // 0 -> 1 (epsilon)
+    nfa.transitions.push_back({nfa.startState, "ε", stateB});  // 0 -> 2 (epsilon)
+    nfa.transitions.push_back({stateA, "a", stateB});          // 1 -> 2
+
+    // Tranzițiile pentru `(b|c)*`
+    nfa.transitions.push_back({stateB, "ε", stateC});          // 2 -> 3 (epsilon)
+    nfa.transitions.push_back({stateC, "b", stateC});          // 3 -> 3 (b loop)
+    nfa.transitions.push_back({stateC, "c", stateC});          // 3 -> 3 (c loop)
+    nfa.transitions.push_back({stateC, "ε", stateD});          // 3 -> 4 (epsilon)
+
+    // Tranzițiile pentru `d+`
+    nfa.transitions.push_back({stateD, "d", stateLoop});       // 4 -> 5 (d transition)
+    nfa.transitions.push_back({stateLoop, "d", stateLoop});    // 5 -> 5 (d loop)
+    nfa.transitions.push_back({stateLoop, "ε", stateFinal});   // 5 -> 6 (epsilon)
+
+    return nfa;
+}
+
 // Functie pentru expresia `a(b|c)*d`
 NFA createAFNForABorCStarD() {
     NFA nfa;
@@ -193,6 +228,7 @@ NFA createAFNForABorCStarD() {
     return nfa;
 }
 
+
 int main() {
     // Generare pentru `abb`
     NFA nfaAbb = createAFNForAbb();
@@ -218,6 +254,12 @@ int main() {
     generateDotFile(nfaABCStarABBC, "regex_abcStarABBC.dot");
     cout << "Pentru a genera imaginea graficului pentru `(a|b|c)*abbc`, executa comanda:\n";
     cout << "dot -Tpng regex_abcStarABBC.dot -o regex_abcStarABBC.png\n\n";
+    
+    //generare pentru expresia a?(b|c)*d+
+    NFA nfaAQuestionBorCStarDPlus = createAFNForAQuestionBorCStarDPlus();
+    generateDotFile(nfaAQuestionBorCStarDPlus, "regex_aQuestionBorCStarDPlus.dot");
+    cout << "Pentru a genera imaginea graficului pentru `a?(b|c)*d+`, executa comanda:\n";
+    cout << "dot -Tpng regex_aQuestionBorCStarDPlus.dot -o regex_aQuestionBorCStarDPlus.png\n\n";
 
     // Generare pentru `a(b|c)*d`
     NFA nfaABorCStarD = createAFNForABorCStarD();
@@ -225,6 +267,7 @@ int main() {
     cout << "Pentru a genera imaginea graficului pentru `a(b|c)*d`, executa comanda:\n";
     cout << "dot -Tpng regex_abcd.dot -o regex_abcd.png\n\n";
 
+    
     
 
     return 0;

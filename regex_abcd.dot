@@ -1,0 +1,15 @@
+digraph NFA {
+  rankdir=LR;
+  node [shape = circle];
+  0 [style=filled, color=green];
+  7 [shape=doublecircle];
+  0 -> 1 [label="a"];
+  1 -> 2 [label="ε"];
+  2 -> 3 [label="b"];
+  2 -> 4 [label="c"];
+  3 -> 5 [label="ε"];
+  4 -> 5 [label="ε"];
+  5 -> 2 [label="ε"];
+  5 -> 6 [label="d"];
+  6 -> 7 [label="ε"];
+}

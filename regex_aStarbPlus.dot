@@ -1,0 +1,10 @@
+digraph NFA {
+  rankdir=LR;
+  node [shape = circle];
+  0 [style=filled, color=green];
+  3 [shape=doublecircle];
+  0 -> 0 [label="a"];
+  0 -> 1 [label="b"];
+  1 -> 2 [label="b"];
+  2 -> 3 [label="b"];
+}
