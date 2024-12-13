@@ -6,39 +6,42 @@ using namespace std;
 
 // Structura pentru tranzitii
 struct Transition {
-    int from;
-    string symbol;
-    int to;
+    int from;              // Starea sursă (de unde pleacă tranziția)
+    string symbol;         // Simbolul tranziției (poate fi un caracter sau "ε" pentru epsilon)
+    int to;                // Starea destinație (unde ajunge tranziția)
 };
 
 // Structura pentru AFN
 struct NFA {
     int startState;
     int finalState;
-    vector<Transition> transitions;
+    vector<Transition> transitions;                      // Lista tuturor tranzițiilor din automat
 };
 
-// Functie pentru generarea unui fisier .dot pentru vizualizare grafica
+// Functie pentru generarea unui fisier .dot utilizabil cu Grapviz pentru vizualizare grafica
 void generateDotFile(const NFA& nfa, const string& filename) {
-    ofstream dotFile(filename);
-    if (!dotFile.is_open()) {
+    ofstream dotFile(filename);                            //deschidem fisierul de iesire unde se va scrie reprez graf
+    if (!dotFile.is_open()) {                              //verificam dc s-a deschis corect
         cerr << "Eroare la deschiderea fisierului: " << filename << endl;
         return;
     }
-
-    dotFile << "digraph NFA {\n";
-    dotFile << "  rankdir=LR;\n";
+   
+    dotFile << "digraph NFA {\n";                            // Declarația de început pentru un graf direcționat
+    dotFile << "  rankdir=LR;\n";                            // Specificăm direcția graficului: de la stânga la dreapta
+    //stiluri pentru noduri(st in, fin, tranzactii)
     dotFile << "  node [shape = circle];\n";
     dotFile << "  " << nfa.startState << " [style=filled, color=green];\n";
     dotFile << "  " << nfa.finalState << " [shape=doublecircle];\n";
 
+    // Iterăm prin fiecare tranziție din lista de tranziții a automatului
     for (const auto& transition : nfa.transitions) {
+        // Adăugăm fiecare tranziție în graf în formatul "stare_sursă -> stare_destinație [label=symbol]"
         dotFile << "  " << transition.from << " -> " << transition.to
                 << " [label=\"" << transition.symbol << "\"];\n";
     }
 
-    dotFile << "}\n";
-    dotFile.close();
+    dotFile << "}\n";    //inchidem graficul
+    dotFile.close();     //inchidem fisierul
     cout << "Fisierul .dot a fost generat: " << filename << endl;
 }
 
@@ -121,8 +124,8 @@ NFA nfa;
 
 // Functie pentru expresia `(a|b|c)*abbc`
 NFA createAFNForABCStarABBC(){
-    NFA nfa;
-    int state = 0;
+    NFA nfa;                          // Creăm o structură AFN care va conține stările și tranzițiile
+    int state = 0;                    // Inițializăm un contor pentru a atribui ID-uri unice fiecărei stări
 
     // Definirea starilor
     nfa.startState = state++;
@@ -134,13 +137,14 @@ NFA createAFNForABCStarABBC(){
     int state6 = state++;
     int state7 = state++;
     int state8 = state++;
-    int state9 = state++;
+    int state9 = state++;             // Starea de început a secvenței `abbc`
     int state10 = state++;
     int state11 = state++;
     int state12 = state++;
     nfa.finalState = state++;
 
     // Tranzitiile pentru `(a|b|c)*`
+    // Creăm un ciclu care permite repetarea simbolurilor `a`, `b`, sau `c`
     nfa.transitions.push_back({nfa.startState, "ε", state1});   // 0 -> 1
     nfa.transitions.push_back({nfa.startState, "ε", state9});  // 0 -> 9
     nfa.transitions.push_back({state1, "ε", state2});          // 1 -> 2
@@ -157,7 +161,7 @@ NFA createAFNForABCStarABBC(){
     
 
     // Tranzitiile pentru `abbc`
-    nfa.transitions.push_back({state9, "a", state10});          // 9 -> 10
+    nfa.transitions.push_back({state9, "a", state10});         // Tranziție pe `a`: 9 -> 10
     nfa.transitions.push_back({state10, "b", state11});        // 10 -> 11
     nfa.transitions.push_back({state11, "b", state12});        // 11 -> 12
     nfa.transitions.push_back({state12, "c", nfa.finalState}); // 12 -> 13
@@ -250,8 +254,8 @@ int main() {
 
     // Generare pentru `(a|b|c)*abbc`
     // Crearea AFN-ului pentru expresia regulata `(a|b|c)*abbc`
-    NFA nfaABCStarABBC = createAFNForABCStarABBC();
-    generateDotFile(nfaABCStarABBC, "regex_abcStarABBC.dot");
+    NFA nfaABCStarABBC = createAFNForABCStarABBC();                                   // Apelăm funcția pentru a genera AFN-ul
+    generateDotFile(nfaABCStarABBC, "regex_abcStarABBC.dot");                         // Generăm fișierul .dot pentru vizualizare
     cout << "Pentru a genera imaginea graficului pentru `(a|b|c)*abbc`, executa comanda:\n";
     cout << "dot -Tpng regex_abcStarABBC.dot -o regex_abcStarABBC.png\n\n";
     
